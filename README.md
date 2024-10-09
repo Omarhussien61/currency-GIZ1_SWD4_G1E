@@ -206,7 +206,7 @@ To contribute to this project, please follow these steps:
 If you have any questions or need further assistance, feel free to reach out to:
 
 - **Rishan**: [mohamedrishan224@gmai.com]
-- GitHub: [https://github.com/yourusername]
+- GitHub: [https://github.com/rishan-mohamed/currency-converter-main.git]
 
 ---
 
