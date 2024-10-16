@@ -14,15 +14,31 @@ class CurrencyConverterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Currency Converter',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        dropdownMenuTheme: DropdownMenuThemeData(
+          textStyle: TextStyle(color: Colors.white),
+          menuStyle: MenuStyle(
+            backgroundColor: MaterialStatePropertyAll<Color>(Colors.blue),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            labelStyle: TextStyle(color: Colors.white),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white),
+            ),
+          ),
+        ),
       ),
       home: BlocProvider(
         create: (context) => CurrencyBloc(
           repository: CurrencyRepository(),
         ),
-        child: HomeScreen(), 
+        child: HomeScreen(),
       ),
     );
   }

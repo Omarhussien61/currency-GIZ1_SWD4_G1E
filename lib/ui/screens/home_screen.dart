@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert'; // For decoding JSON
 import 'package:http/http.dart' as http;
@@ -11,173 +12,174 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<String> _targetCurrencies = [];
-  String _selectedCurrency = 'USD'; // Default selected currency
-  double _inputAmount = 0.0;
+  String _selectedCurrency = 'EGP'; // Default selected currency
+  double _inputAmount = 1.0;
   double? _convertedAmount;
 
   // Store the conversion rates map
   final Map<String, double> conversionRates = {
-    "USD": 1,
-    "AED": 3.6725,
-    "AFN": 68.1414,
-    "ALL": 89.9559,
-    "AMD": 386.9372,
-    "ANG": 1.7900,
-    "AOA": 920.5228,
-    "ARS": 975.9200,
-    "AUD": 1.4840,
-    "AWG": 1.7900,
-    "AZN": 1.7005,
-    "BAM": 1.7822,
-    "BBD": 2.0000,
-    "BDT": 119.5302,
-    "BGN": 1.7821,
-    "BHD": 0.3760,
-    "BIF": 2906.5660,
-    "BMD": 1.0000,
-    "BND": 1.3039,
-    "BOB": 6.9325,
-    "BRL": 5.4997,
-    "BSD": 1.0000,
-    "BTN": 83.9951,
-    "BWP": 13.2535,
-    "BYN": 3.2696,
-    "BZD": 2.0000,
-    "CAD": 1.3650,
-    "CDF": 2843.8912,
-    "CHF": 0.8572,
-    "CLP": 925.1883,
-    "CNY": 7.0635,
-    "COP": 4232.2537,
-    "CRC": 518.8799,
-    "CUP": 24.0000,
-    "CVE": 100.4780,
-    "CZK": 23.0704,
-    "DJF": 177.7210,
-    "DKK": 6.7949,
-    "DOP": 60.2657,
-    "DZD": 133.0801,
-    "EGP": 48.4954,
-    "ERN": 15.0000,
-    "ETB": 118.5050,
-    "EUR": 0.9113,
-    "FJD": 2.2223,
-    "FKP": 0.7635,
-    "FOK": 6.7949,
-    "GBP": 0.7635,
-    "GEL": 2.7290,
-    "GGP": 0.7635,
-    "GHS": 15.9830,
-    "GIP": 0.7635,
-    "GMD": 70.7193,
-    "GNF": 8675.8677,
-    "GTQ": 7.7457,
-    "GYD": 209.0932,
-    "HKD": 7.7744,
-    "HNL": 24.8877,
-    "HRK": 6.8657,
-    "HTG": 131.8379,
-    "HUF": 364.4969,
-    "IDR": 15670.6050,
-    "ILS": 3.7722,
-    "IMP": 0.7635,
-    "INR": 83.9952,
-    "IQD": 1311.9600,
-    "IRR": 42056.7486,
-    "ISK": 135.1942,
-    "JEP": 0.7635,
-    "JMD": 158.0988,
-    "JOD": 0.7090,
-    "JPY": 148.1755,
-    "KES": 129.0685,
-    "KGS": 84.4631,
-    "KHR": 4075.9309,
-    "KID": 1.4838,
-    "KMF": 448.3012,
-    "KRW": 1346.6440,
-    "KWD": 0.3065,
-    "KYD": 0.8333,
-    "KZT": 485.8605,
-    "LAK": 21970.6461,
-    "LBP": 89500.0000,
-    "LKR": 293.2558,
-    "LRD": 193.0711,
-    "LSL": 17.5574,
-    "LYD": 4.7819,
-    "MAD": 9.8093,
-    "MDL": 17.5717,
-    "MGA": 4560.7542,
-    "MKD": 55.9904,
-    "MMK": 2096.7475,
-    "MNT": 3375.0462,
-    "MOP": 8.0076,
-    "MRU": 39.5137,
-    "MUR": 46.3780,
-    "MWK": 1744.8254,
-    "MXN": 19.3460,
-    "MYR": 4.2868,
-    "MZN": 63.9143,
-    "NAD": 17.5574,
-    "NGN": 1616.5943,
-    "NIO": 36.8086,
-    "NOK": 10.6838,
-    "NPR": 134.3921,
-    "NZD": 1.6321,
-    "OMR": 0.3845,
-    "PAB": 1.0000,
-    "PEN": 3.7257,
-    "PGK": 3.9427,
-    "PHP": 56.8534,
-    "PKR": 277.9621,
-    "PLN": 3.9250,
-    "PYG": 7828.6783,
-    "QAR": 3.6400,
-    "RON": 4.5321,
-    "RSD": 106.6384,
-    "RUB": 96.4020,
-    "RWF": 1356.5181,
-    "SAR": 3.7500,
-    "SBD": 8.4814,
-    "SCR": 13.5244,
-    "SDG": 449.1426,
-    "SEK": 10.3408,
-    "SGD": 1.3039,
-    "SHP": 0.7635,
-    "SLE": 22.5863,
-    "SLL": 22586.3304,
-    "SOS": 571.3921,
-    "SRD": 31.6543,
-    "SSP": 3200.0792,
-    "STN": 22.3254,
-    "SYP": 12877.5518,
-    "SZL": 17.5574,
-    "THB": 33.5089,
-    "TJS": 10.6432,
-    "TMT": 3.5000,
-    "TND": 3.0675,
-    "TOP": 2.3254,
-    "TRY": 34.2743,
-    "TTD": 6.7672,
-    "TVD": 1.4838,
-    "TWD": 32.2029,
-    "TZS": 2714.5874,
-    "UAH": 41.1827,
-    "UGX": 3679.7234,
-    "UYU": 41.4841,
-    "UZS": 12770.3791,
-    "VES": 37.0740,
-    "VND": 24834.9725,
-    "VUV": 117.9866,
-    "WST": 2.6944,
-    "XAF": 597.7349,
-    "XCD": 2.7000,
-    "XDR": 0.7460,
-    "XOF": 597.7349,
-    "XPF": 108.7402,
-    "YER": 250.2612,
-    "ZAR": 17.5579,
-    "ZMW": 26.6156,
-    "ZWL": 25.8683,
+    "EGP": 1,
+    "AED": 0.07562,
+    "AFN": 1.3910,
+    "ALL": 1.8575,
+    "AMD": 7.9792,
+    "ANG": 0.03686,
+    "AOA": 19.1094,
+    "ARS": 20.1658,
+    "AUD": 0.03062,
+    "AWG": 0.03686,
+    "AZN": 0.03504,
+    "BAM": 0.03683,
+    "BBD": 0.04118,
+    "BDT": 2.4597,
+    "BGN": 0.03683,
+    "BHD": 0.007742,
+    "BIF": 59.9458,
+    "BMD": 0.02059,
+    "BND": 0.02693,
+    "BOB": 0.1428,
+    "BRL": 0.1150,
+    "BSD": 0.02059,
+    "BTN": 1.7292,
+    "BWP": 0.2743,
+    "BYN": 0.06709,
+    "BZD": 0.04118,
+    "CAD": 0.02830,
+    "CDF": 58.8391,
+    "CHF": 0.01765,
+    "CLP": 19.2253,
+    "CNY": 0.1458,
+    "COP": 87.3161,
+    "CRC": 10.6526,
+    "CUP": 0.4941,
+    "CVE": 2.0766,
+    "CZK": 0.4772,
+    "DJF": 3.6592,
+    "DKK": 0.1405,
+    "DOP": 1.2406,
+    "DZD": 2.7436,
+    "ERN": 0.3088,
+    "ETB": 2.4930,
+    "EUR": 0.01883,
+    "FJD": 0.04585,
+    "FKP": 0.01576,
+    "FOK": 0.1406,
+    "GBP": 0.01576,
+    "GEL": 0.05611,
+    "GGP": 0.01576,
+    "GHS": 0.3290,
+    "GIP": 0.01576,
+    "GMD": 1.4570,
+    "GNF": 178.4614,
+    "GTQ": 0.1594,
+    "GYD": 4.3126,
+    "HKD": 0.1600,
+    "HNL": 0.5123,
+    "HRK": 0.1419,
+    "HTG": 2.7160,
+    "HUF": 7.5340,
+    "IDR": 323.9561,
+    "ILS": 0.07769,
+    "IMP": 0.01576,
+    "INR": 1.7286,
+    "IQD": 26.9677,
+    "IRR": 878.1096,
+    "ISK": 2.7972,
+    "JEP": 0.01576,
+    "JMD": 3.2590,
+    "JOD": 0.01460,
+    "JPY": 3.0602,
+    "KES": 2.6590,
+    "KGS": 1.7469,
+    "KHR": 83.9397,
+    "KID": 0.03062,
+    "KMF": 9.2653,
+    "KRW": 27.8039,
+    "KWD": 0.006314,
+    "KYD": 0.01716,
+    "KZT": 10.1379,
+    "LAK": 453.0648,
+    "LBP": 1842.7645,
+    "LKR": 6.0387,
+    "LRD": 3.9807,
+    "LSL": 0.3611,
+    "LYD": 0.09864,
+    "MAD": 0.2024,
+    "MDL": 0.3638,
+    "MGA": 94.3772,
+    "MKD": 1.1567,
+    "MMK": 43.2211,
+    "MNT": 69.6279,
+    "MOP": 0.1648,
+    "MRU": 0.8166,
+    "MUR": 0.9503,
+    "MVR": 0.3182,
+    "MWK": 35.8877,
+    "MXN": 0.4007,
+    "MYR": 0.08836,
+    "MZN": 1.3165,
+    "NAD": 0.3611,
+    "NGN": 33.3736,
+    "NIO": 0.7582,
+    "NOK": 0.2212,
+    "NPR": 2.7668,
+    "NZD": 0.03387,
+    "OMR": 0.007917,
+    "PAB": 0.02059,
+    "PEN": 0.07679,
+    "PGK": 0.08099,
+    "PHP": 1.1826,
+    "PKR": 5.7252,
+    "PLN": 0.08099,
+    "PYG": 161.0805,
+    "QAR": 0.07495,
+    "RON": 0.09375,
+    "RSD": 2.2052,
+    "RUB": 2.0022,
+    "RWF": 28.4013,
+    "SAR": 0.07721,
+    "SBD": 0.1742,
+    "SCR": 0.2817,
+    "SDG": 10.5505,
+    "SEK": 0.2140,
+    "SGD": 0.02693,
+    "SHP": 0.01576,
+    "SLE": 0.4764,
+    "SLL": 476.4429,
+    "SOS": 11.7830,
+    "SRD": 0.6657,
+    "SSP": 66.1169,
+    "STN": 0.4614,
+    "SYP": 266.0556,
+    "SZL": 0.3611,
+    "THB": 0.6907,
+    "TJS": 0.2200,
+    "TMT": 0.07212,
+    "TND": 0.06338,
+    "TOP": 0.04852,
+    "TRY": 0.7054,
+    "TTD": 0.1398,
+    "TVD": 0.03062,
+    "TWD": 0.6634,
+    "TZS": 56.1583,
+    "UAH": 0.8491,
+    "UGX": 75.7014,
+    "USD": 0.02059,
+    "UYU": 0.8525,
+    "UZS": 263.1146,
+    "VES": 0.7752,
+    "VND": 511.2844,
+    "VUV": 2.4550,
+    "WST": 0.05583,
+    "XAF": 12.3538,
+    "XCD": 0.05559,
+    "XDR": 0.01539,
+    "XOF": 12.3538,
+    "XPF": 2.2474,
+    "YER": 5.1576,
+    "ZAR": 0.3611,
+    "ZMW": 0.5453,
+    "ZWL": 0.1250
   };
 
   @override
@@ -189,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Function to convert currency
   void _convertCurrency() {
     setState(() {
-      _convertedAmount = _inputAmount * (conversionRates[_selectedCurrency] ?? 1);
+      _convertedAmount = _inputAmount / (conversionRates[_selectedCurrency] ?? 1);
     });
   }
 
@@ -199,21 +201,30 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         leading: const Icon(Icons.arrow_back),
         title: const Text(
-          "Advanced Exchanger",
+          "DEPI",
           style: TextStyle(fontSize: 20),
         ),
         centerTitle: true,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start, // Align children to the start
             children: [
+              Container(height:150,child: Center(child: Image.asset("assets/pro"
+                  ".png"))),
+               Center(
+                 child: Text(
+                  'GIZ1_SWD4_G1E',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold,
+                      color: Colors.blue[200]),
+                               ),
+               ),
               const SizedBox(height: 20), // Add space below the AppBar
               const Text(
                 'INSERT AMOUNT:',
-                style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Card(
@@ -226,6 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                        suffix: Text("EGP")
                       ),
                       onChanged: (value) {
                         setState(() {
@@ -234,38 +246,70 @@ class _HomeScreenState extends State<HomeScreen> {
                         });
                       },
                     ),
-                    DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        value: _selectedCurrency,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        items: _targetCurrencies.map((String currency) {
-                          return DropdownMenuItem<String>(
-                            value: currency,
-                            child: Text(currency),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedCurrency = newValue!;
-                            _convertCurrency(); 
-                          });
-                        },
-                      ),
-                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 30,),
+              DropdownSearch<String>(
+                compareFn: (item,filter) {
+                  return true;
+                },
+
+                itemAsString: (u) => "${u}",
+                dropdownBuilder: _customPopupItemBuilderExample2,
+                selectedItem:  _selectedCurrency,
+                decoratorProps: DropDownDecoratorProps(
+
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                    filled: true,
+                    fillColor: Colors.blue,
+                    suffixIconColor: Colors.white,
+                    border: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 0.1), borderRadius: BorderRadius.circular(10), gapPadding: 0),
+                    enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 0.1), borderRadius: BorderRadius.circular(10), gapPadding: 0),
+                    focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.blue, width: 0.1), borderRadius: BorderRadius.circular(10), gapPadding: 0),
+                    iconColor: Colors.white,
+                  ),
+
+                ),
+
+                items:(filter, infiniteScrollProps) =>
+                    _targetCurrencies,
+                onChanged: (item) {
+                  setState(() {
+                    _selectedCurrency = item!;
+                    _convertCurrency();
+                  });                },
+                popupProps: PopupProps.menu(
+                  showSearchBox: true,
+                  searchFieldProps: TextFieldProps(
+                    decoration: InputDecoration(
+                      hintText: 'Search for a Currency',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+
+              ),
               const SizedBox(height: 16),
               if (_convertedAmount != null)
                 Card(
                   elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      'Converted Amount: ${_convertedAmount?.toStringAsFixed(2)} $_selectedCurrency',
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: Padding(
+                      padding:  EdgeInsets.symmetric(vertical:16,
+                          horizontal: 10),
+                      child: Center(
+                        child: Text(
+                          'Converted Amount\n ${_convertedAmount?.toStringAsFixed(2)}\n $_selectedCurrency',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -275,4 +319,33 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+  Widget _customPopupItemBuilderExample2(BuildContext? context, item) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Icon(
+          Icons.money,
+          color: Colors.white,
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.blue,
+          ),
+          padding: EdgeInsets.zero,
+          margin: EdgeInsets.zero,
+          child: Text(
+            "${item}",
+            style: TextStyle(
+                fontSize: 12, color: Colors.white, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ),
+      ],
+    );
+  }
+
 }
